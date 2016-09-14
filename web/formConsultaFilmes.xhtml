@@ -22,7 +22,7 @@
                 <h:outputText id="txtClassificacao" value="#{cadastroFilmesMB.filme.classificacao}"/>
                 <p:outputLabel value="Sinopse:" for="txaSinopse"/>
                 <p:inputTextarea id="txaSinopse" label="Sinopse" rows="5" cols="60" value="#{cadastroFilmesMB.filme.sinopse}" readonly="true"/>
-                <p:outputLabel value="Capa do filme:" for="giCapa"/>
+                <p:outputLabel value="Capa do filme teste:" for="giCapa"/>
                 <p:graphicImage id="giCapa" value="#{sessionScope.streamCapa}" rendered="#{sessionScope.streamCapa ne null}"/>
                 <p:graphicImage library="img" name="semcapa.jpg" rendered="#{sessionScope.streamCapa eq null}"/>
             </h:panelGrid>
