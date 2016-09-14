@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition>
+        <h:form>
+            <p:messages/>
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Nome:" for="txtNome"/>
+                <h:outputText id="txtNome" value="#{cadastroClientesMB.cliente.nome}"/>
+                <p:outputLabel value="CPF:" for="txtCPF"/>
+                <h:outputText id="txtCPF" value="#{cadastroClientesMB.cliente.cpf}"/>
+                <p:outputLabel value="Telefone:" for="txtTelefone"/>
+                <h:outputText id="txtTelefone" value="#{cadastroClientesMB.cliente.telefone}"/>
+                <p:outputLabel value="E-mail:" for="txtEmail"/>
+                <h:outputText id="txtEmail" value="#{cadastroClientesMB.cliente.email}"/>
+            </h:panelGrid>
+            <p:fieldset legend="Endereço">
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Rua:" for="txtRua"/>
+                    <h:outputText id="txtRua" value="#{cadastroClientesMB.cliente.endereco.rua}"/>
+                    <p:outputLabel value="Número:" for="txtNumero"/>
+                    <h:outputText id="txtNumero" value="#{cadastroClientesMB.cliente.endereco.numero}"/>
+                    <p:outputLabel value="Complemento:" for="txtComplemento"/>
+                    <h:outputText id="txtComplemento" value="#{cadastroClientesMB.cliente.endereco.complemento}"/>
+                    <p:outputLabel value="Bairro:" for="txtBairro"/>
+                    <h:outputText id="txtBairro" value="#{cadastroClientesMB.cliente.endereco.bairro}"/>
+                    <p:outputLabel value="CEP:" for="txtCEP"/>
+                    <h:outputText id="txtCEP" value="#{cadastroClientesMB.cliente.endereco.cep}"/>
+                    <p:outputLabel value="Cidade:" for="txtCidade"/>
+                    <h:outputText id="txtCidade" value="#{cadastroClientesMB.cliente.endereco.cidade}"/>
+                    <p:outputLabel value="UF:" for="txtUF"/>
+                    <h:outputText id="txtUF" value="#{cadastroClientesMB.cliente.endereco.uf}"/>
+                </h:panelGrid>
+            </p:fieldset>
+        </h:form>
+    </ui:composition>
+</html>
+

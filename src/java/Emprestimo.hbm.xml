@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="br.com.lvnascimento.videolocadorajsfhib.dominio.Emprestimo"
+           table="emprestimos">
+        <id name="id">
+            <generator class="native"/>
+        </id>
+        <property name="data" type="date"/>
+        <property name="estahCompleto"/>
+        <many-to-one name="cliente"
+                     column="id_cliente"
+                     class="br.com.lvnascimento.videolocadorajsfhib.dominio.Cliente"/>
+        <list name="itens" cascade="all" table="itens_de_emprestimo">
+            <key column="id_emprestimo"/>
+            <index column="numero"/>
+            <one-to-many class="br.com.lvnascimento.videolocadorajsfhib.dominio.ItemDeEmprestimo"/>
+        </list>
+    </class>
+</hibernate-mapping>

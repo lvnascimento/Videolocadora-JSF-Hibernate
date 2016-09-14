@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition>
+        <h:form>
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Título:" for="txtTitulo"/>
+                <h:outputText id="txtTitulo" value="#{cadastroFilmesMB.filme.titulo}"/>
+                <p:outputLabel value="Gênero:" for="txtGenero"/>
+                <h:outputText id="txtGenero" value="#{cadastroFilmesMB.filme.genero.nome}"/>
+                <p:outputLabel value="Categoria:" for="txtCategoria"/>
+                <h:outputText id="txtCategoria" value="#{cadastroFilmesMB.filme.categoria.nome}"/>
+                <p:outputLabel value="Tema:" for="txtTema"/>
+                <h:outputText id="txtTema" value="#{cadastroFilmesMB.filme.tema}"/>
+                <p:outputLabel value="Ano:" for="txtAno"/>
+                <h:outputText id="txtAno" value="#{cadastroFilmesMB.filme.ano}"/>
+                <p:outputLabel value="Classificação:" for="txtClassificacao"/>
+                <h:outputText id="txtClassificacao" value="#{cadastroFilmesMB.filme.classificacao}"/>
+                <p:outputLabel value="Sinopse:" for="txaSinopse"/>
+                <p:inputTextarea id="txaSinopse" label="Sinopse" rows="5" cols="60" value="#{cadastroFilmesMB.filme.sinopse}" readonly="true"/>
+                <p:outputLabel value="Capa:" for="giCapa"/>
+                <p:graphicImage id="giCapa" value="#{sessionScope.streamCapa}" rendered="#{sessionScope.streamCapa ne null}"/>
+                <p:graphicImage library="img" name="semcapa.jpg" rendered="#{sessionScope.streamCapa eq null}"/>
+            </h:panelGrid>
+        </h:form>
+    </ui:composition>
+</html>
+

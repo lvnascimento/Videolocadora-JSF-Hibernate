@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="templates/padrao_interno.xhtml">
+        <ui:define name="tituloPagina">
+        Cadastro de DVDs
+        </ui:define>
+        <ui:define name="conteudoPagina">
+            <p:growl id="mensagens" class="ajax-update"/>
+            <p:accordionPanel>
+                <p:tab closable="false" title="Incluir Novos DVDs">
+                    <h:form>
+                        <p:fieldset legend="Dados do Filme">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Título do Filme:" for="txtTitulo"/>
+                                <p:autoComplete id="txtTitulo" label="Título do filme" completeMethod="#{cadastroDVDsMB.filtraFilmesPorTitulo}" emptyMessage="Nenhum filme encontrado" size="60" value="#{cadastroDVDsMB.tituloFilme}" required="true"/>
+                                <p:outputLabel value="Quantidade de DVDs:" for="txtQuantidadeDVDs"/>
+                                <p:inputText id="txtQuantidadeDVDs" type="number" label="Quantidade de DVDs" size="10" value="#{cadastroDVDsMB.quantidadeDVDs}">
+                                    <f:validateLongRange minimum="1"/>
+                                </p:inputText>
+                            </h:panelGrid>
+                            <p:commandButton ajax="false" value="Salvar" action="#{cadastroDVDsMB.salvarDVDs()}"/>
+                        </p:fieldset>
+                        <p:fieldset legend="DVDs Incluídos" rendered="#{cadastroDVDsMB.controlador.filmeCorrente ne null}">
+                            <p:dataTable value="#{cadastroDVDsMB.novosDVDs}" var="dvd">
+                                <p:column headerText="Código">
+                                    #{dvd.codigo}
+                                </p:column>
+                                <p:column headerText="Filme">
+                                    #{dvd.titulo}
+                                </p:column>
+                                <p:column headerText="Gênero">
+                                    #{dvd.filme.genero.nome}
+                                </p:column>
+                                <p:column headerText="Categoria">
+                                    #{dvd.nomeCategoria}
+                                </p:column>
+                            </p:dataTable>
+                            <p:commandButton ajax="false" value="Finalizar" action="#{cadastroDVDsMB.finalizar()}"/>
+                        </p:fieldset>
+                    </h:form>
+                </p:tab>
+                
+                <p:tab closable="false" title="Consulta/Alteração/Remoção">
+                    <h:form>
+                        <p:outputLabel for="txtIDDVD" value="Código do DVD:"/>
+                        <p:inputText id="txtIDDVD" value="#{cadastroDVDsMB.idDVD}"/>
+                        <p:commandButton value="Consultar" action="#{cadastroDVDsMB.carregar()}" process="@this txtIDDVD" update="dadosDVD :mensagens"/>
+                        <p:fieldset id="dadosDVD" legend="Dados do DVD">
+                            <h:panelGrid columns="2" rendered="#{cadastroDVDsMB.dvd ne null}">
+                                <p:outputLabel value="Código do DVD:" for="txtCodDVD"/>
+                                <h:outputText id="txtCodDVD" value="#{cadastroDVDsMB.dvd.codigo}"/>
+                                <p:outputLabel value="Título do Filme:" for="txtTitulo"/>
+                                <h:panelGroup>
+                                    <p:autoComplete id="txtTitulo" label="Título do filme" completeMethod="#{cadastroDVDsMB.filtraFilmesPorTitulo}" emptyMessage="Nenhum filme encontrado" size="60" value="#{cadastroDVDsMB.tituloFilme}" required="true"/>
+                                    <p:commandButton ajax="false" type="button" icon="ui-icon-plusthick" title="Cadastrar Novo Filme" onclick="PF('dlgNovoFilme').show();"/>
+                                </h:panelGroup>
+                                <p:outputLabel value="Estado: " for="txtEstado"/>
+                                <h:outputText id="txtEstado" value="DISPONÍVEL" style="color:blue" rendered="#{not cadastroDVDsMB.dvd.emprestado and not cadastroDVDsMB.dvd.baixa}"/>
+                                <h:panelGroup rendered="#{cadastroDVDsMB.dvd.emprestado}">
+                                    <h:outputText value="EMPRESTADO" style="color:red"/>
+                                    <h:outputText id="txtCliente" value=" (Cliente #{cadastroDVDsMB.dvd.cliente.nome} - Devolver até "/>
+                                    <h:outputText value="#{cadastroDVDsMB.dvd.itemDeEmprestimoCorrente.dataParaDevolucao}">
+                                        <f:convertDateTime dateStyle="medium"/>
+                                    </h:outputText>)
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{cadastroDVDsMB.dvd.baixa}">
+                                    <h:outputText value="BAIXA" style="color:red"/>
+                                    <h:outputText id="txtMotivoBaixa" value=" (#{cadastroDVDsMB.dvd.motivoBaixa})"/>
+                                </h:panelGroup>
+                                <p:outputLabel value="Empréstimos realizados:"/>
+                                <p:dataTable value="#{cadastroDVDsMB.dvd.itensDeEmprestimo}" var="emprestimo">
+                                    <p:column headerText="Data">
+                                        <h:outputText value="#{emprestimo.emprestimo.data}">
+                                            <f:convertDateTime/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Cliente">
+                                        #{emprestimo.cliente.nome}
+                                    </p:column>
+                                    <p:column headerText="Valor Total">
+                                        <h:outputText value="#{emprestimo.valorFinal}">
+                                            <f:convertNumber type="currency"/>
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+                                
+                            </h:panelGrid>
+                            <hr/>
+                            <p:commandButton value="Salvar" action="#{cadastroDVDsMB.atualizar()}" process="dadosDVD" update="@parent :mensagens" rendered="#{cadastroDVDsMB.dvd ne null}"/>
+                            <p:commandButton value="Remover" action="#{cadastroDVDsMB.remover()}" process="@this" update="@parent :mensagens" rendered="#{cadastroDVDsMB.dvd ne null}">
+                                <p:confirm header="Confirmação" message="Tem certeza que deseja remover o DVD?" icon="ui-icon-alert"/>
+                            </p:commandButton>
+                        </p:fieldset>
+                    </h:form>
+                </p:tab>
+            </p:accordionPanel>
+        </ui:define>
+        <ui:define name="dialogos">
+            <p:dialog widgetVar="dlgNovoFilme" closable="true" closeOnEscape="true" header="Incluir Novo Filme" modal="true" resizable="false" visible="#{not cadastroFilmesMB.filme.novo}">
+                <ui:include src="formCadastroFilmes.xhtml"/>
+            </p:dialog>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <h:form>
+                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </h:form>
+            </p:confirmDialog>
+        </ui:define>
+    </ui:composition>
+</html>
+

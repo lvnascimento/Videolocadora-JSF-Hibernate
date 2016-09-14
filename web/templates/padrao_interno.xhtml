@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title><ui:insert name="tituloPagina"/></title>
+        <h:outputStylesheet library="css" name="estilos.css"/>
+    </h:head>
+    <h:body>
+        <p:layout fullPage="true">
+            <p:layoutUnit position="north" size="80">
+                <span id="tituloAplicacao">Videolocadora Online</span>
+            </p:layoutUnit>
+            <p:layoutUnit id="painelMenuLateral" position="west">
+                <h:form>
+                    <p:menu>
+                        <p:menuitem ajax="false" value="Empréstimo" action="emprestimo"/>
+                        <p:menuitem ajax="false" value="Devolução" action="devolucao"/>
+                        <p:separator/>
+                        <p:menuitem ajax="false" value="Clientes" action="cadastroClientes"/>
+                        <p:menuitem ajax="false" value="DVDs" action="cadastroDVDs"/>
+                        <p:menuitem ajax="false" value="Filmes" action="cadastroFilmes"/>
+                        <p:menuitem ajax="false" value="Gêneros" action="cadastroGeneros"/>
+                    </p:menu>
+                </h:form>
+            </p:layoutUnit>
+            <p:layoutUnit position="center">
+                <f:facet name="header">
+                    <ui:insert name="tituloPagina"/>
+                </f:facet>
+                <ui:insert name="conteudoPagina"/>
+            </p:layoutUnit>
+        </p:layout>
+        <ui:insert name="dialogos"/>
+    </h:body>
+</html>
+

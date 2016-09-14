@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <ui:composition template="templates/padrao_interno.xhtml">
+        <ui:define name="tituloPagina">
+            Cadastro de Clientes
+        </ui:define>
+        <ui:define name="conteudoPagina">
+            <p:growl id="growlMsgsRemocao" severity="error"/>
+            <h:form id="formClientes" styleClass="ajax-update" prependId="false">
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton value="Novo Cliente" icon="ui-icon-plus" action="#{cadastroClientesMB.novoCliente()}" process="@this" update=":dlgNovoCliente" oncomplete="PF('dlgNovoCliente').show();"/>
+                    </f:facet>
+                </p:toolbar>
+                <p:growl severity="info"/>
+                <p:dataTable id="tabListaClientes" value="#{cadastroClientesMB.listaClientes}" var="cliente" emptyMessage="Nenhum cliente cadastrado." paginator="true" rows="10" sortBy="#{cliente.nome}">
+                    <p:column headerText="ID" width="70">
+                        #{cliente.id}
+                    </p:column> 
+                    <p:column headerText="Nome" sortBy="#{cliente.nome}">
+                        #{cliente.nome}
+                    </p:column>
+                    <p:column width="150">
+                        <p:commandButton icon="ui-icon-pencil" action="#{cadastroClientesMB.carregarCliente(cliente)}" update=":dlgNovoCliente" oncomplete="PF('dlgNovoCliente').show();"/>
+                        <p:commandButton icon="ui-icon-trash" action="#{cadastroClientesMB.removerCliente(cliente)}" update="@form :growlMsgsRemocao">
+                            <p:confirm header="Confirmação" message="Tem certeza que deseja remover o usuário?" icon="ui-icon-alert"/>
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-search" action="#{cadastroClientesMB.carregarCliente(cliente)}" update=":dlgConsultaCliente" oncomplete="PF('dlgConsultaCliente').show();"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </ui:define>
+        <ui:define name="dialogos">
+            <h:form>
+                <p:remoteCommand name="limpaSessao" update="@none" actionListener="#{cadastroClientesMB.limpar()}" />
+            </h:form>
+            <p:dialog id="dlgNovoCliente" styleClass="ajax-update" closable="true" closeOnEscape="true" header="Novo Cliente" modal="true" resizable="false" widgetVar="dlgNovoCliente" visible="#{not cadastroClientesMB.cliente.novo}" onHide="limpaSessao()">
+                <ui:include src="formCadastroClientes.xhtml"/>
+            </p:dialog>
+            <p:dialog id="dlgConsultaCliente" closable="true" closeOnEscape="true" header="Consulta do Cliente" modal="true" resizable="false" widgetVar="dlgConsultaCliente">
+                <ui:include src="formConsultaClientes.xhtml"/>
+            </p:dialog>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <h:form>
+                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </h:form>
+            </p:confirmDialog>
+        </ui:define>
+    </ui:composition>
+</html>
+

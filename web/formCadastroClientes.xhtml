@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition>
+        <h:form>
+            <p:messages/>
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Nome:" for="txtNome"/>
+                <p:inputText id="txtNome" label="Nome" maxlength="100" size="60" value="#{cadastroClientesMB.cliente.nome}" required="true"/>
+                <p:outputLabel value="CPF:" for="txtCPF"/>
+                <p:inputMask id="txtCPF" label="CPF" value="#{cadastroClientesMB.cliente.cpf}" mask="999.999.999-99" required="true"/>
+                <p:outputLabel value="Telefone:" for="txtTelefone"/>
+                <p:inputMask id="txtTelefone" value="#{cadastroClientesMB.cliente.telefone}" mask="(99) 9999-9999"/>
+                <p:outputLabel value="E-mail:" for="txtEmail"/>
+                <p:inputText id="txtEmail" label="E-mail" maxlength="255" size="60" value="#{cadastroClientesMB.cliente.email}" validatorMessage="E-mail inválido!">
+                    <f:validateRegex pattern="^[0-9a-zA-Z_\.]+@[0-9a-zA-Z_\.]+$"/>
+                </p:inputText>
+            </h:panelGrid>
+            <p:fieldset legend="Endereço">
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Rua:" for="txtRua"/>
+                    <p:inputText id="txtRua" maxlength="100" size="60" value="#{cadastroClientesMB.cliente.endereco.rua}"/>
+                    <p:outputLabel value="Número:" for="txtNumero"/>
+                    <p:inputText id="txtNumero" maxlength="10" size="10" value="#{cadastroClientesMB.cliente.endereco.numero}"/>
+                    <p:outputLabel value="Complemento:" for="txtComplemento"/>
+                    <p:inputText id="txtComplemento" maxlength="20" size="20" value="#{cadastroClientesMB.cliente.endereco.complemento}"/>
+                    <p:outputLabel value="Bairro:" for="txtBairro"/>
+                    <p:inputText id="txtBairro" maxlength="100" size="60" value="#{cadastroClientesMB.cliente.endereco.bairro}"/>
+                    <p:outputLabel value="CEP:" for="txtCEP"/>
+                    <p:inputMask id="txtCEP" value="#{cadastroClientesMB.cliente.endereco.cep}" mask="99999999"/>
+                    <p:outputLabel value="Cidade:" for="txtCidade"/>
+                    <p:inputText id="txtCidade" maxlength="100" size="60" value="#{cadastroClientesMB.cliente.endereco.cidade}"/>
+                    <p:outputLabel value="UF:" for="txtUF"/>
+                    <p:inputText id="txtUF" maxlength="2" size="3" value="#{cadastroClientesMB.cliente.endereco.uf}"/>
+                </h:panelGrid>
+            </p:fieldset>
+            <p:commandButton value="Salvar" action="#{cadastroClientesMB.salvarCliente()}" update="@form @(.ajax-update)"/>
+        </h:form>
+    </ui:composition>
+</html>
+

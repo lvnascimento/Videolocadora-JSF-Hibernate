@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="br.com.lvnascimento.videolocadorajsfhib.dominio.Categoria"
+         table="categorias">
+      <id name="id" column="id">
+          <generator class="native"/>
+      </id>
+      <property name="nome" column="nome"/>
+      <property name="prazo" column="prazo"/>
+      <property name="preco" column="preco"/>
+  </class>    
+</hibernate-mapping>

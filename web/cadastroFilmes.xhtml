@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="templates/padrao_interno.xhtml">
+        <ui:define name="tituloPagina">
+            Cadastro de Filmes
+        </ui:define>
+        <ui:define name="conteudoPagina">
+            <p:growl id="growlMsgsRemocao" severity="error"/>
+            <h:form id="formFilmes" styleClass="ajax-update" prependId="false">
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton value="Novo Filme" icon="ui-icon-plus" action="#{cadastroFilmesMB.novoFilme()}" process="@this" update=":dlgNovoFilme" oncomplete="PF('dlgNovoFilme').show();"/>
+                    </f:facet>
+                </p:toolbar>
+                <p:growl severity="info"/>
+                <p:dataTable id="tabListaFilmes" value="#{cadastroFilmesMB.listaFilmes}" var="filme" emptyMessage="Nenhum filme cadastrado." paginator="true" rows="10" sortBy="#{filme.titulo}">
+                    <p:column headerText="ID" width="70">
+                        #{filme.id}
+                    </p:column> 
+                    <p:column headerText="Nome" sortBy="#{filme.titulo}">
+                        #{filme.titulo}
+                    </p:column>
+                    <p:column width="150">
+                        <p:commandButton icon="ui-icon-pencil" action="#{cadastroFilmesMB.carregarFilme(filme)}" update=":dlgNovoFilme" oncomplete="PF('dlgNovoFilme').show();"/>
+                        <p:commandButton icon="ui-icon-trash" action="#{cadastroFilmesMB.removerFilme(filme)}" update="@form :growlMsgsRemocao">
+                            <p:confirm header="Confirmação" message="Tem certeza que deseja remover o filme?" icon="ui-icon-alert"/>
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-search" action="#{cadastroFilmesMB.carregarFilme(filme)}" update=":dlgConsultaFilme" oncomplete="PF('dlgConsultaFilme').show();"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </ui:define>
+        <ui:define name="dialogos">
+            <h:form>
+                <p:remoteCommand name="limpaSessao" update="@none" actionListener="#{cadastroFilmesMB.limpar()}" />
+            </h:form>
+            <p:dialog id="dlgNovoFilme" styleClass="ajax-update" closable="true" closeOnEscape="true" header="Novo Filme" modal="true" resizable="false" widgetVar="dlgNovoFilme" visible="#{not cadastroFilmesMB.filme.novo}" onHide="limpaSessao()">
+                <ui:include src="formCadastroFilmes.xhtml"/>
+            </p:dialog>
+            <p:dialog id="dlgConsultaFilme" closable="true" closeOnEscape="true" header="Consulta do Filme" modal="true" resizable="false" widgetVar="dlgConsultaFilme">
+                <ui:include src="formConsultaFilmes.xhtml"/>
+            </p:dialog>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <h:form>
+                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </h:form>
+            </p:confirmDialog>
+        </ui:define>
+    </ui:composition>
+</html>
+

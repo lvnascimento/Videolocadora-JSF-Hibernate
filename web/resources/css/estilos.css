@@ -1,0 +1,25 @@
+/* 
+    Created on : 02/02/2016, 08:21:14
+    Author     : Leonardo
+*/
+#tituloAplicacao {
+    font-family: Freestyle Script, cursive;
+    font-size: 30pt;
+    font-weight: bold;
+}
+
+.dadosConsulta {
+    font-weight: bold;
+}
+
+.painelTotal {
+    background-color:#DDDDDD;
+}
+
+.painelTotal #divTotal {
+    float:left;
+}
+
+.painelTotal #divBotoes {
+    float:right;
+}

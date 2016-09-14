@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:composition template="/templates/padrao_interno.xhtml">
+        <ui:define name="tituloPagina">Empréstimo de DVDs</ui:define>
+        <ui:define name="conteudoPagina">
+            <h:form id="frmIdentificacaoCliente" prependId="false">
+                <p:messages styleClass="ajax-update"/>
+                <p:panel id="pnDadosCliente" styleClass="ajax-update" header="Dados do Cliente">
+                    <p:outputLabel for="nomeCliente" value="Nome do Cliente: "/>
+                    <p:autoComplete id="nomeCliente" value="#{emprestimoMB.nomeCliente}" completeMethod="#{emprestimoMB.filtraClientes}" size="60" cache="true" emptyMessage="Cliente não cadastrado!" onchange="submit();" valueChangeListener="#{emprestimoMB.processaNomeCliente}"/>
+                    <p:commandButton ajax="false" type="button" icon="ui-icon-plusthick" title="Cadastrar Novo Cliente" onclick="PF('dlgNovoCliente').show();"/>
+                    <p:commandButton icon="ui-icon-pencil" action="#{cadastroClientesMB.carregarCliente(emprestimoMB.controlador.emprestimoCorrente.cliente)}" title="Alterar dados do cliente" update=":dlgNovoCliente" oncomplete="PF('dlgNovoCliente').show();" rendered="#{emprestimoMB.controlador.emprestimoCorrente.cliente ne null}"/>
+                    <h:panelGrid columns="2" rendered="#{emprestimoMB.controlador.emprestimoCorrente.cliente ne null}">
+                        <p:outputLabel for="txtCPFCliente" value="CPF:"/>
+                        <h:outputText id="txtCPFCliente" styleClass="dadosConsulta" value="#{emprestimoMB.controlador.emprestimoCorrente.cliente.cpf}"/>
+                        <p:outputLabel for="txtEnderecoCliente" value="Endereço:"/>
+                        <h:outputText id="txtEnderecoCliente" styleClass="dadosConsulta" value="#{emprestimoMB.controlador.emprestimoCorrente.cliente.endereco}"/>
+                        <p:outputLabel for="txtTelefoneCliente" value="Telefone:"/>
+                        <h:outputText id="txtTelefoneCliente" styleClass="dadosConsulta" value="#{emprestimoMB.controlador.emprestimoCorrente.cliente.telefone}"/>
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+            <p:spacer/>
+            <p:panel id="pnDVDs" header="DVDs" rendered="#{emprestimoMB.controlador.emprestimoCorrente.cliente ne null}">
+                <h:form id="frmEntradaDVDs" prependId="false">
+                    <p:outputLabel for="txtCodDVD" value="Código do DVD: "/>
+                    <p:inputText id="txtCodDVD" value="#{emprestimoMB.codigoDVD}" onchange="submit();" valueChangeListener="#{emprestimoMB.processaCodigoDVD}">
+                        <f:validateLongRange minimum="1"/>
+                    </p:inputText>
+                </h:form>
+                <p:dataTable value="#{emprestimoMB.controlador.emprestimoCorrente.itens}" var="item" summary="Listagem de DVDs emprestados" emptyMessage="Nenhum DVD foi registrado ainda.">
+                    <p:column headerText="Código" width="70">#{item.dvd.codigo}</p:column>
+                    <p:column headerText="Filme">#{item.dvd.titulo}</p:column>
+                    <p:column headerText="Categoria" width="200">#{item.dvd.nomeCategoria}</p:column>
+                    <p:column headerText="Valor" width="100">
+                        <h:outputText value="#{item.valorOriginal}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Data Dev." width="100">
+                        <h:outputText value="#{item.dataParaDevolucao}">
+                            <f:convertDateTime/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column width="50">
+                        <h:form>
+                            <p:commandButton ajax="false" icon="ui-icon-closethick" title="Cancelar Item" actionListener="#{emprestimoMB.cancelarItem(item)}"/>
+                        </h:form>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+            <p:spacer/>
+            <h:form>
+                <p:panel styleClass="painelTotal" rendered="#{emprestimoMB.controlador.emprestimoCorrente.cliente ne null}">
+                    <p:spacer width="30"/>
+                    <div id="divTotal">
+                        Total = 
+                        <h:outputText styleClass="dadosConsulta" value="#{emprestimoMB.controlador.emprestimoCorrente.total}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </div>
+                    <div id="divBotoes">
+                        <p:commandButton ajax="false" value="Encerrar Empréstimo" action="#{emprestimoMB.terminarEmprestimo}"/>
+                        <p:commandButton ajax="false" value="Cancelar Empréstimo" action="emprestimo"/>
+                    </div>
+                </p:panel>
+            </h:form>
+        </ui:define>
+        <ui:define name="dialogos">
+            <p:dialog id="dlgNovoCliente" widgetVar="dlgNovoCliente" styleClass="ajax-update" closable="true" closeOnEscape="true" header="Incluir Novo Cliente" modal="true" resizable="false" visible="#{not cadastroClientesMB.cliente.novo}">
+                <ui:include src="formCadastroClientes.xhtml"/>
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
+</html>
+

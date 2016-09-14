@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:composition template="/templates/padrao_interno.xhtml">
+        <ui:define name="tituloPagina">Devolução de DVDs</ui:define>
+        <ui:define name="conteudoPagina">
+            <p:messages/>
+            <p:panel id="pnDVDs" header="DVDs">
+                <h:form id="frmEntradaDVDs" prependId="false">
+                    <p:outputLabel for="txtCodDVD" value="Código do DVD: "/>
+                    <p:inputText id="txtCodDVD" value="#{devolucaoMB.codigoDVD}" onchange="submit();" valueChangeListener="#{devolucaoMB.processaCodigoDVD}">
+                        <f:validateLongRange minimum="1"/>
+                    </p:inputText>
+                </h:form>
+                <p:dataTable value="#{devolucaoMB.controlador.devolucaoCorrente.itens}" var="item" summary="Listagem de DVDs devolvidos" emptyMessage="Nenhum DVD foi registrado ainda.">
+                    <p:column headerText="Código" width="70">#{item.dvd.codigo}</p:column>
+                    <p:column headerText="Filme">#{item.dvd.titulo}</p:column>
+                    <p:column headerText="Categoria" width="150">#{item.dvd.nomeCategoria}</p:column>
+                    <p:column headerText="Valor" width="80">
+                        <h:outputText value="#{item.valorOriginal}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Data Dev." width="100">
+                        <h:outputText value="#{item.dataParaDevolucao}">
+                            <f:convertDateTime/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Situação" width="70">
+                        <h:outputText value="Atrasado" rendered="#{item.atrasado}" style="color:red;"/>
+                        <h:outputText value="OK" rendered="#{not item.atrasado}" style="color:blue;"/>
+                    </p:column>
+                    <p:column headerText="Atraso" width="70">
+                        <h:outputText value="#{item.diasEmAtraso} dia(s)"/>
+                    </p:column>
+                    <p:column headerText="Multa" width="80">
+                        <h:outputText value="#{item.valorMulta}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Total Item" width="100">
+                        <h:outputText value="#{item.valorFinal}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column width="50">
+                        <h:form>
+                            <p:commandButton ajax="false" icon="ui-icon-closethick" title="Cancelar Item" actionListener="#{devolucaoMB.cancelarItem(item)}"/>
+                        </h:form>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+            <p:spacer/>
+            <h:form>
+                <p:panel styleClass="painelTotal">
+                    <p:spacer width="30"/>
+                    <div id="divTotal">
+                        Total = 
+                        <h:outputText styleClass="dadosConsulta" value="#{devolucaoMB.controlador.devolucaoCorrente.total}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </div>
+                    <div id="divBotoes">
+                        <p:commandButton ajax="false" value="Encerrar Devolução" action="#{devolucaoMB.terminarDevolucao}"/>
+                    </div>
+                </p:panel>
+            </h:form>
+            <p:spacer/>
+            <h:form>
+                <p:panel styleClass="painelPagamento" header="Pagamento" rendered="#{devolucaoMB.controlador.devolucaoCorrente.estahCompleta}">
+                    <p:outputLabel for="txtValorPago" value="Valor pago: "/>
+                    <p:inputText id="txtValorPago" value="#{devolucaoMB.valorPago}" onchange="submit();" valueChangeListener="#{devolucaoMB.processaPagamento}">
+                        <f:validateDoubleRange minimum="#{devolucaoMB.controlador.devolucaoCorrente.total}"/>
+
+                    </p:inputText>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <h:outputText value="Troco = " rendered="#{devolucaoMB.controlador.devolucaoCorrente.pagamento ne null}"/>
+                    <h:outputText value="#{devolucaoMB.controlador.devolucaoCorrente.troco}" rendered="#{devolucaoMB.controlador.devolucaoCorrente.pagamento ne null}">
+                        <f:convertNumber type="currency"/>
+                    </h:outputText>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <p:commandButton ajax="false" value="Fechar" action="#{devolucaoMB.fechar}" rendered="#{devolucaoMB.controlador.devolucaoCorrente.pagamento ne null}"/> 
+                </p:panel>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
+

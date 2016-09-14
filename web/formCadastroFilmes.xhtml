@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition>
+        <p:messages/>
+        <h:form enctype="multipart/form-data">
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Título:" for="txtTitulo"/>
+                <p:inputText id="txtTitulo" label="Título" maxlength="100" size="60" value="#{cadastroFilmesMB.filme.titulo}" required="true"/>
+                <p:outputLabel value="Gênero:" for="omGenero"/>
+                <p:selectOneMenu id="omGenero" value="#{cadastroFilmesMB.idGenero}" required="true">
+                    <f:selectItems value="#{cadastroFilmesMB.listaGeneros}" var="genero" itemLabel="#{genero.nome}" itemValue="#{genero.id}"/>
+                </p:selectOneMenu>
+                <p:outputLabel value="Categoria:" for="orCategoria"/>
+                <p:selectOneRadio id="orCategoria" value="#{cadastroFilmesMB.idCategoria}" required="true">
+                    <f:selectItems value="#{cadastroFilmesMB.listaCategorias}" var="cat" itemLabel="#{cat.nome}" itemValue="#{cat.id}"/>
+                </p:selectOneRadio>
+                <p:outputLabel value="Tema:" for="txtTema"/>
+                <p:inputText id="txtTema" label="Tema" maxlength="100" size="60" value="#{cadastroFilmesMB.filme.tema}"/>
+                <p:outputLabel value="Ano:" for="txtAno"/>
+                <p:inputText id="txtAno" type="number" label="Ano" maxlength="4" size="5" value="#{cadastroFilmesMB.filme.ano}"/>
+                <p:outputLabel value="Classificação:" for="txtClassificacao"/>
+                <p:inputText id="txtClassificacao" type="number" label="Classificação" maxlength="2" size="3" value="#{cadastroFilmesMB.filme.classificacao}"/>
+                <p:outputLabel value="Sinopse:" for="txaSinopse"/>
+                <p:inputTextarea id="txaSinopse" label="Sinopse" rows="5" cols="60" value="#{cadastroFilmesMB.filme.sinopse}"/>
+                <p:outputLabel value="Capa:" for="fuCapa"/>
+                <p:fileUpload id="fuCapa" mode="simple" value="#{cadastroFilmesMB.arquivoFoto}"/>
+            </h:panelGrid>
+            <p:commandButton ajax="false" value="Salvar" action="#{cadastroFilmesMB.salvarFilme()}"/>
+        </h:form>
+    </ui:composition>
+</html>
+

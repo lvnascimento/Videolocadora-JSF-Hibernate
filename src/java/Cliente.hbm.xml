@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class  name="br.com.lvnascimento.videolocadorajsfhib.dominio.Cliente" table="clientes">
+      <id name="id" column="id">
+          <generator class="native"/>
+      </id>
+      <property name="nome" column="nome"/>
+      <property name="cpf" column="cpf"/>
+      <property name="telefone" column="telefone"/>
+      <property name="email" column="email"/>
+      <component name="endereco">
+          <property name="rua" column="endereco_rua"/>
+          <property name="numero" column="endereco_numero"/>
+          <property name="complemento" column="endereco_complemento"/>
+          <property name="bairro" column="endereco_bairro"/>
+          <property name="cep" column="endereco_cep"/>
+          <property name="cidade" column="endereco_cidade"/>
+          <property name="uf" column="endereco_uf"/>
+      </component>
+  </class>
+</hibernate-mapping>

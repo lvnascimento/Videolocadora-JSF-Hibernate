@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="br.com.lvnascimento.videolocadorajsfhib.dominio.DVD" table="dvds">
+      <id name="codigo" column="id">
+          <generator class="assigned"/>
+      </id>
+      <property name="motivoBaixa"/>
+      <many-to-one name="filme"
+                   column="id_filme" 
+                   class="br.com.lvnascimento.videolocadorajsfhib.dominio.Filme"/>
+      <many-to-one name="itemDeEmprestimoCorrente" 
+                   class="br.com.lvnascimento.videolocadorajsfhib.dominio.ItemDeEmprestimo"
+                   column="itemDeEmprestimoCorrente"
+                   unique="true"
+                   not-null="false"/>
+      <set name="itensDeEmprestimo" table="itens_de_emprestimo">
+            <key column="id_dvd"/>
+            <one-to-many class="br.com.lvnascimento.videolocadorajsfhib.dominio.ItemDeEmprestimo"/>
+      </set>
+  </class>
+</hibernate-mapping>
